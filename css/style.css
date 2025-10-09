@@ -456,6 +456,11 @@ pre {
     .container {
       max-width: 540px; } }
   @media (min-width: 768px) {
+    .hero,
+    .js-fullheight {
+      min-height: 100vh !important;
+      height: auto !important;
+    }
     .container {
       max-width: 720px; } }
   @media (min-width: 992px) {
@@ -464,6 +469,7 @@ pre {
   @media (min-width: 1200px) {
     .container {
       max-width: 1140px; } }
+
 
 .container-fluid {
   width: 100%;

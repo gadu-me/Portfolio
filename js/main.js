@@ -18,14 +18,20 @@
 
 
 	var fullHeight = function() {
+		const setHeight = () => {
+			const windowHeight = window.innerHeight;
+			$('.js-fullheight').css('height', windowHeight + 'px');
+		};
 
-		$('.js-fullheight').css('height', $(window).height());
-		$(window).resize(function(){
-			$('.js-fullheight').css('height', $(window).height());
-		});
+		setHeight();
+		$(window).resize(setHeight);
 
+		// Fix for mobile browsers (especially Chrome/Safari)
+		window.addEventListener('orientationchange', setHeight);
+		window.addEventListener('focus', setHeight);
 	};
 	fullHeight();
+
 
 	// loader
 	var loader = function() {
