@@ -19,6 +19,24 @@
 	<link rel="stylesheet" href="css/flaticon.css">
 	<link rel="stylesheet" href="css/icomoon.css">
 	<link rel="stylesheet" href="css/style.css">
+
+	<!-- Custom CSS to Fix Mobile Scrolling -->
+	<style>
+		/* Ensure home section allows scrolling */
+		.hero, .home-slider, .slider-item {
+			height: auto !important;
+			min-height: 100vh; /* Full viewport height but allows growth */
+			overflow: visible !important;
+		}
+		.owl-carousel {
+			touch-action: pan-y; /* Allow vertical touch scrolling */
+		}
+		/* Fix for nav toggler button alignment */
+		.navbar-toggler span[aria-hidden="true"] {
+			font-size: 1.5rem; /* Match menu icon size */
+			line-height: 1;
+		}
+	</style>
 </head>
 
 <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
@@ -47,15 +65,15 @@
 
 <!-- Home Section -->
 <section id="home-section" class="hero">
-	<div class="home-slider  owl-carousel">
-		<div class="slider-item ">
+	<div class="home-slider owl-carousel">
+		<div class="slider-item">
 			<div class="overlay"></div>
 			<div class="container">
 				<div class="row d-md-flex no-gutters slider-text align-items-end justify-content-end" data-scrollax-parent="true">
 					<div class="one-third js-fullheight order-md-last img" style="background-image:url(images/bg_1.png);">
 						<div class="overlay"></div>
 					</div>
-					<div class="one-forth d-flex  align-items-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
+					<div class="one-forth d-flex align-items-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
 						<div class="text">
 							<span class="subheading">Hello!</span>
 							<h1 class="mb-4 mt-3">I'm <span>Gadisa Roba</span></h1>
@@ -112,7 +130,6 @@
 		</div>
 	</div>
 </section>
-
 
 <!-- Volunteer Section -->
 <section class="ftco-section ftco-no-pb" id="volunteer-section">
@@ -386,22 +403,53 @@
 
 <script>
 	$(document).ready(function() {
-		// Reference to the toggler button
+		// Reference to the toggler button and nav
 		var $toggler = $('.navbar-toggler');
+		var $nav = $('#ftco-nav');
+
+		// Function to update toggler state
+		function updateTogglerState() {
+			if ($nav.hasClass('show')) {
+				$toggler.html('<span aria-hidden="true">&times;</span>');
+				$toggler.attr('aria-label', 'Close navigation');
+			} else {
+				$toggler.html('<span class="oi oi-menu"></span> Menu');
+				$toggler.attr('aria-label', 'Toggle navigation');
+			}
+		}
 
 		// Update button on collapse show/hide events
-		$('#ftco-nav').on('show.bs.collapse', function () {
-			$toggler.html('<span aria-hidden="true">&times;</span>');
-			$toggler.attr('aria-label', 'Close navigation');
-		}).on('hide.bs.collapse', function () {
-			$toggler.html('<span class="oi oi-menu"></span> Menu');
-			$toggler.attr('aria-label', 'Toggle navigation');
+		$nav.on('show.bs.collapse hidden.bs.collapse', function () {
+			updateTogglerState();
 		});
 
-		// Optional: Handle direct click if needed (Bootstrap handles aria-expanded)
-		$toggler.on('click', function() {
-			// Bootstrap's collapse will trigger the events above
+		// Handle nav link clicks to ensure button state updates
+		$('.navbar-nav .nav-link').on('click', function() {
+			if ($nav.hasClass('show')) {
+				$nav.collapse('hide'); // Manually collapse the menu
+			}
 		});
+
+		// Configure Owl Carousel for mobile scrolling
+		$('.home-slider').owlCarousel({
+			items: 1,
+			loop: true,
+			autoplay: true,
+			autoplayTimeout: 5000,
+			autoplayHoverPause: true,
+			nav: false,
+			dots: true,
+			touchDrag: true,
+			mouseDrag: true,
+			freeDrag: false, // Prevent dragging from blocking scroll
+			preventScrollOnTouch: 'auto' // Allow touch scrolling
+		});
+
+		// Ensure page scrolling isn't blocked
+		$('body, html').css('overflow', 'visible');
+
+		// Initial state check
+		updateTogglerState();
 	});
 </script>
 </body>
