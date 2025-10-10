@@ -18,18 +18,16 @@
 
 
 	var fullHeight = function() {
-		const setHeight = () => {
-			const windowHeight = window.innerHeight;
-			$('.js-fullheight').css('height', windowHeight + 'px');
-		};
+		function setHeight() {
+			// Use innerHeight for accurate viewport height (especially on mobile)
+			var windowHeight = window.innerHeight;
+			$('.js-fullheight').css('min-height', windowHeight + 'px');
+		}
 
 		setHeight();
-		$(window).resize(setHeight);
-
-		// Fix for mobile browsers (especially Chrome/Safari)
-		window.addEventListener('orientationchange', setHeight);
-		window.addEventListener('focus', setHeight);
+		$(window).on('resize orientationchange', setHeight);
 	};
+
 	fullHeight();
 
 
